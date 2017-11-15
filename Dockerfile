@@ -7,7 +7,7 @@ ENV CLOUD_SDK_VERSION 178.0.0
 
 # package dependencies
 RUN apt-get update && apt-get -qqy dist-upgrade \
-&& apt-get -qqy install mktemp git curl unzip python-pip apt-transport-https lsb-release
+&& apt-get -qqy install mktemp git curl unzip python-pip apt-transport-https lsb-release openssh-client
 
 # Terraform
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
@@ -25,7 +25,8 @@ RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" \
 && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
 && apt-get update && apt-get -qqy install google-cloud-sdk \
 && gcloud config set core/disable_usage_reporting true \
-&& gcloud config set component_manager/disable_update_check true
+&& gcloud config set component_manager/disable_update_check true \
+&& gcloud config set metrics/environment github_docker_image
 
 # cleanup
 RUN rm -rf /var/lib/apt/lists/*
