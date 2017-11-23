@@ -7,7 +7,7 @@ ENV CLOUD_SDK_VERSION 180.0.0
 
 # package dependencies
 RUN apt-get update && apt-get -qqy dist-upgrade \
-&& apt-get -qqy install mktemp git curl unzip python-pip apt-transport-https lsb-release openssh-client
+&& apt-get -qqy install mktemp git curl unzip python-pip apt-transport-https lsb-release openssh-client jq
 
 # Terraform
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
