@@ -3,7 +3,7 @@ FROM golang:1.9-stretch
 ENV TERRAFORM_VERSION=0.11.2
 ENV TERRAFORM_SHA256SUM=f728fa73ff2a4c4235a28de4019802531758c7c090b6ca4c024d48063ab8537b
 
-ENV CLOUD_SDK_VERSION 180.0.1
+ENV CLOUD_SDK_VERSION 189.0.0
 
 # package dependencies
 RUN apt-get update && apt-get -qqy dist-upgrade \
