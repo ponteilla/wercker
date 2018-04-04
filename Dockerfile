@@ -5,6 +5,8 @@ ENV TERRAFORM_SHA256SUM=131c440263382c79c7f783b70ff35cd1d03eb31c44f7738d153d95a0
 
 ENV CLOUD_SDK_VERSION 194.0.0
 
+ENV KUBECTL_VERSION=1.10.0
+
 # package dependencies
 RUN apt-get update && apt-get -qqy dist-upgrade \
 && apt-get -qqy install mktemp git curl unzip python-pip apt-transport-https lsb-release openssh-client jq
@@ -27,6 +29,11 @@ RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" \
 && gcloud config set core/disable_usage_reporting true \
 && gcloud config set component_manager/disable_update_check true \
 && gcloud config set metrics/environment github_docker_image
+
+# kubectl
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
+&& chmod +x ./kubectl \
+&& mv ./kubectl /usr/bin
 
 # cleanup
 RUN rm -rf /var/lib/apt/lists/*
