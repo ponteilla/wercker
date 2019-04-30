@@ -2,10 +2,9 @@ FROM golang:1.12-stretch
 
 ENV TERRAFORM_VERSION=0.11.13
 ENV TERRAFORM_SHA256SUM=5925cd4d81e7d8f42a0054df2aafd66e2ab7408dbed2bd748f0022cfe592f8d2
-
-ENV CLOUD_SDK_VERSION 243.0.0
-
+ENV CLOUD_SDK_VERSION=243.0.0
 ENV KUBECTL_VERSION=1.14.1
+ENV HUGO_VERSION=0.55.4
 
 # package dependencies
 RUN apt-get update && apt-get -qqy dist-upgrade \
@@ -24,7 +23,7 @@ RUN pip install awscli
 # Google Cloud SDK
 RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" \
     && echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
-    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
+    && curl -sL https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
     && apt-get update && apt-get -qqy install google-cloud-sdk google-cloud-sdk-app-engine-go \
     && gcloud config set core/disable_usage_reporting true \
     && gcloud config set component_manager/disable_update_check true \
@@ -46,6 +45,10 @@ RUN apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 softwar
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g firebase-tools
+
+# # Hugo
+RUN curl -sL https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_Linux-64bit.deb > hugo.deb \
+    && dpkg -i hugo.deb && rm hugo.deb
 
 # cleanup
 RUN rm -rf /var/lib/apt/lists/*
